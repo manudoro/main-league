@@ -8,19 +8,20 @@ plugins {
 	kotlin("plugin.spring") version "1.8.20"
 }
 
-group = "ar.edu.unq.eperdemic"
+group = "ar.edu.unq.mainLeague"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
+	google()
 }
 dependencies {
-	//implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	//implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -29,7 +30,8 @@ dependencies {
 	implementation("org.mockito:mockito-core:5.2.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("mysql:mysql-connector-java:8.0.33")
-	testImplementation("org.testng:testng:7.1.0")
+
+
 }
 
 tasks.withType<Test> {
@@ -39,5 +41,11 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		jvmTarget = "11"
+	}
+}
+
+configurations {
+	all {
+		exclude("org.slf4j:log4j-over-slf4j")
 	}
 }

@@ -1,14 +1,18 @@
 package com.ar.mainleague.modelo
 
-import com.ar.mainleague.modelo.utils.randomStats.RandomStats
-import java.util.InvalidPropertiesFormatException
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import com.ar.mainleague.modelo.utils.Validator
+import com.ar.mainleague.modelo.utils.randomStats.StatsSetter
+import org.hibernate.annotations.ColumnTransformer
+import org.hibernate.annotations.Formula
+import javax.persistence.*
 
 @Entity
-class Player(var position: String, var age: Int,var name: String, var lastName: String) {
+data class Player(
+    var position: Position,
+    var age: Int,
+    var name: String,
+    var lastName: String) {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long? = null
@@ -16,23 +20,13 @@ class Player(var position: String, var age: Int,var name: String, var lastName: 
     var defense : Int = 0
     var passing : Int = 0
     var gkSkills : Int = 0
-    var rating : Float = 0.0F
+
+    @ColumnTransformer(read = "(attack + defense + passing + gk_skills) / 3 - (age / 2)", write = "?")
+    var rating : Double = 0.0
 
     init{
-        validatePosition()
-        RandomStats.setAttributes(this)
-        rating = rate()
-    }
-
-    private fun validatePosition() {
-        if(position.uppercase() !in listOf("GK", "DF", "MF", "FW")){
-            throw InvalidPropertiesFormatException("La posición no es valida")
-        }
-    }
-
-    fun rate():Float{
-        val co = (attack + defense + passing + gkSkills) / 3 - (age / 2)
-        return co.toFloat()
+        StatsSetter.setAttributes(this)
+        Validator.validatePlayer(this)
     }
 
 

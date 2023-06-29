@@ -1,6 +1,9 @@
 package com.ar.mainleague.playerServiceTest
 
 import com.ar.mainleague.modelo.Player
+import com.ar.mainleague.modelo.Position
+import com.ar.mainleague.modelo.utils.exceptions.BlankFieldException
+import com.ar.mainleague.modelo.utils.exceptions.InvalidAgeException
 import com.ar.mainleague.service.PlayerService
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,24 +22,44 @@ class PlayerServiceTest {
 
     @BeforeEach
     fun setUp(){
-        lopez = service.inscribePlayer("fw", 18, "Gabriel", "Lopez")
-        service.inscribePlayer("fw", 25, "Gabriel", "Garcia")
-        service.inscribePlayer("df", 34, "Luciano", "Aute")
-        service.inscribePlayer("gk", 29, "Martin", "Perez")
-        service.inscribePlayer("mf", 19, "Diego", "Fogra")
-        service.inscribePlayer("mf", 24, "Alan", "Sian")
+        lopez = service.inscribePlayer(Position.Forward, 18, "Gabriel", "Lopez")
+        service.inscribePlayer(Position.Forward, 25, "Gabriel", "Garcia")
+        service.inscribePlayer(Position.Defense, 34, "Luciano", "Aute")
+        service.inscribePlayer(Position.Goalkeeper, 29, "Martin", "Perez")
+        service.inscribePlayer(Position.Midfielder, 19, "Diego", "Fogra")
+        service.inscribePlayer(Position.Midfielder, 24, "Alan", "Sian")
     }
 
     @Test
-    fun sePersisteUnJugador(){
+    fun seInscribeUnJugador(){
         lopez = service.getPlayer(lopez.id!!)
         Assertions.assertNotNull(lopez.id)
     }
 
     @Test
-    fun ocurreUnErrorAlPersistirSinPosicionValida(){
-        Assertions.assertThrows(InvalidPropertiesFormatException::class.java,{service.inscribePlayer("sad",30, "Peco", "Pieza")})
+    fun seIntentaInscribirUnJugadorMenorDe18(){
+        Assertions.assertThrows(InvalidAgeException::class.java
+        ) { service.inscribePlayer(Position.Midfielder, 12, "Alan", "Sian") }
     }
+
+    @Test
+    fun seIntentaInscribirUnJugadorMayorDe45(){
+        Assertions.assertThrows(InvalidAgeException::class.java
+        ) { service.inscribePlayer(Position.Midfielder, 70, "Alan", "Sian") }
+    }
+
+    @Test
+    fun seIntentaInscribirUnJugadorConNombreEnBlanco(){
+        Assertions.assertThrows(BlankFieldException::class.java
+        ) { service.inscribePlayer(Position.Midfielder, 20, "", "Gomez") }
+    }
+
+    @Test
+    fun seIntentaInscribirUnJugadorConApellidoEnBlanco(){
+        Assertions.assertThrows(BlankFieldException::class.java
+        ) { service.inscribePlayer(Position.Midfielder, 20, "Pedro", "") }
+    }
+
 
     @AfterAll
     fun clear(){
