@@ -40,10 +40,11 @@ object StatsSetter {
         }
         rate(player)
     }
-    private fun rate(player: Player){
+    private fun rate(player: Player): Double{
         val rating = (player.attack + player.defense + player.passing +player.gkSkills) / 3.0 - (player.age / 2.0)
         val decimalFormat = DecimalFormat("#.##")
-        val formattedRating = decimalFormat.format(rating)
-        player.rating = formattedRating.toDouble()
+        val formattedRating = decimalFormat.format(rating).toDouble()
+        player.rating = formattedRating
+        return formattedRating
     }
 }

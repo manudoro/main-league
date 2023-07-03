@@ -22,7 +22,7 @@ class PlayerServiceImpl : PlayerService, EntentyUtils(){
         val player = Player(pos, age, name, lastName)
 
         dao.save(player)
-        val playerMongo = PlayerMongo(player.id!!, name, lastName, age, pos, player.rating!!)
+        val playerMongo = PlayerMongo(player.id!!, name, lastName, age, pos, player.rating)
         mongoDao.save(playerMongo)
         return player
     }

@@ -21,7 +21,6 @@ data class Player(
     var passing : Int = 0
     var gkSkills : Int = 0
 
-    @ColumnTransformer(read = "(attack + defense + passing + gk_skills) / 3 - (age / 2)", write = "?")
     var rating : Double = 0.0
 
     init{
