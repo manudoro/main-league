@@ -33,10 +33,10 @@ object StatsSetter {
     }
     fun setAttributes(player: Player) {
         when(player.position){
-            Position.Goalkeeper -> setGKAttributes(player)
-            Position.Defense -> setDFAttributes(player)
-            Position.Midfielder -> setMFAttributes(player)
-            Position.Forward -> setFWAttributes(player)
+            Position.GOALKEEPER -> setGKAttributes(player)
+            Position.DEFENSE -> setDFAttributes(player)
+            Position.MIDFIELDER -> setMFAttributes(player)
+            Position.FORWARD -> setFWAttributes(player)
         }
         rate(player)
     }

@@ -7,7 +7,7 @@ class Team(var name: String) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-
+/*
     @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var players: MutableSet<Player> = mutableSetOf()
 
@@ -20,5 +20,7 @@ class Team(var name: String) {
     fun releasePlayer(player : Player){
         players.remove(player)
     }
+
+ */
 
 }

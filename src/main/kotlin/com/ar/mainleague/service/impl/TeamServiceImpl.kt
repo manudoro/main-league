@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class TeamServiceImpl : TeamService {
 
-    @Autowired private lateinit var playerMongoDao : PlayerMongoWrapper
+    @Autowired private lateinit var playerMongoWrapper : PlayerMongoWrapper
     @Autowired private lateinit var playerDao : PlayerDAO
 
-    override fun researchPlayers(criteria: Map<String, Any>, size: Int): List<Player> {
-        val players = playerMongoDao.searchPlayers(criteria, size.toLong())
+    override fun researchPlayers(criteria: PlayerSearchFilter): List<Player> {
+        val players = playerMongoWrapper.searchPlayers(criteria)
         val playersIds = players.map { p-> p.relId }
         return playerDao.findAllById(playersIds)
 

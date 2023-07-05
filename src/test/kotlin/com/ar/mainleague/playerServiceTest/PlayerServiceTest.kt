@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.InvalidPropertiesFormatException
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -22,12 +21,12 @@ class PlayerServiceTest {
 
     @BeforeEach
     fun setUp(){
-        lopez = service.inscribePlayer(Position.Forward, 18, "Gabriel", "Lopez")
-        service.inscribePlayer(Position.Forward, 25, "Gabriel", "Garcia")
-        service.inscribePlayer(Position.Defense, 34, "Luciano", "Aute")
-        service.inscribePlayer(Position.Goalkeeper, 29, "Martin", "Perez")
-        service.inscribePlayer(Position.Midfielder, 19, "Diego", "Fogra")
-        service.inscribePlayer(Position.Midfielder, 24, "Alan", "Sian")
+        lopez = service.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez")
+        service.inscribePlayer(Position.FORWARD, 25, "Gabriel", "Garcia")
+        service.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute")
+        service.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez")
+        service.inscribePlayer(Position.MIDFIELDER, 19, "Diego", "Fogra")
+        service.inscribePlayer(Position.MIDFIELDER, 24, "Alan", "Sian")
     }
 
     @Test
@@ -39,25 +38,25 @@ class PlayerServiceTest {
     @Test
     fun seIntentaInscribirUnJugadorMenorDe18(){
         Assertions.assertThrows(InvalidAgeException::class.java
-        ) { service.inscribePlayer(Position.Midfielder, 12, "Alan", "Sian") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 12, "Alan", "Sian") }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorMayorDe45(){
         Assertions.assertThrows(InvalidAgeException::class.java
-        ) { service.inscribePlayer(Position.Midfielder, 70, "Alan", "Sian") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 70, "Alan", "Sian") }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorConNombreEnBlanco(){
         Assertions.assertThrows(BlankFieldException::class.java
-        ) { service.inscribePlayer(Position.Midfielder, 20, "", "Gomez") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "", "Gomez") }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorConApellidoEnBlanco(){
         Assertions.assertThrows(BlankFieldException::class.java
-        ) { service.inscribePlayer(Position.Midfielder, 20, "Pedro", "") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "Pedro", "") }
     }
 
 

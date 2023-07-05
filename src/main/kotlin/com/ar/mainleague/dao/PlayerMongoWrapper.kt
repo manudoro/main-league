@@ -1,13 +1,9 @@
 package com.ar.mainleague.dao
 
 import com.ar.mainleague.modelo.PlayerMongo
+import com.ar.mainleague.service.impl.PlayerSearchFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.aggregation.Aggregation
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation
-import org.springframework.data.mongodb.core.aggregation.MatchOperation
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation
-import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -28,19 +24,12 @@ class PlayerMongoWrapper {
         playerDAO.deleteByRelId(id)
     }
 
-    fun searchPlayers(criteriaMap: Map<String, Any>, limit: Long): List<PlayerMongo> {
-        val matchOperations = mutableListOf<MatchOperation>()
+    fun deleteAll(){
+        playerDAO.deleteAll()
+    }
 
-        criteriaMap.forEach { (attribute, value) ->
-            val matchOperation = Aggregation.match(Criteria.where(attribute).`is`(value))
-            matchOperations.add(matchOperation)
-        }
-
-        val limitOperation= Aggregation.limit(limit)
-        val aggregationOperations: List<AggregationOperation> = matchOperations + limitOperation
-        val aggregation = TypedAggregation.newAggregation(PlayerMongo::class.java, aggregationOperations)
-
-        return mongoTemplate.aggregate(aggregation, PlayerMongo::class.java).mappedResults
+    fun searchPlayers(searchFilter: PlayerSearchFilter): List<PlayerMongo> {
+        return mongoTemplate.find(searchFilter.getQuery(), PlayerMongo::class.java)
 
     }
 
