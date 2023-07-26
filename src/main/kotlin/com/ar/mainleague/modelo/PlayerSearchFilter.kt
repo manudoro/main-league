@@ -1,6 +1,5 @@
-package com.ar.mainleague.service.impl
+package com.ar.mainleague.modelo
 
-import com.ar.mainleague.modelo.Position
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 

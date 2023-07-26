@@ -2,8 +2,6 @@ package com.ar.mainleague.modelo
 
 import com.ar.mainleague.modelo.utils.Validator
 import com.ar.mainleague.modelo.utils.randomStats.StatsSetter
-import org.hibernate.annotations.ColumnTransformer
-import org.hibernate.annotations.Formula
 import javax.persistence.*
 
 @Entity
@@ -12,6 +10,7 @@ data class Player(
     var age: Int,
     var name: String,
     var lastName: String) {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,18 @@ data class Player(
     init{
         StatsSetter.setAttributes(this)
         Validator.validatePlayer(this)
+    }
+
+    @ManyToMany
+    var users : MutableSet<User> = mutableSetOf()
+
+    fun addUser(user: User) {
+        users.add(user)
+    }
+
+    fun removeUser(user: User) {
+        users.removeIf{u-> u.id == user.id}
+
     }
 
 

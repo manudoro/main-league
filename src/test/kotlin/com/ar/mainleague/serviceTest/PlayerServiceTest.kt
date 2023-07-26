@@ -1,4 +1,4 @@
-package com.ar.mainleague.playerServiceTest
+package com.ar.mainleague.serviceTest
 
 import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.Position

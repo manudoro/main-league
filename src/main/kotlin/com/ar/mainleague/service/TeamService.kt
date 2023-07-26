@@ -1,7 +1,7 @@
 package com.ar.mainleague.service
 
 import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.service.impl.PlayerSearchFilter
+import com.ar.mainleague.modelo.PlayerSearchFilter
 
 interface TeamService {
 

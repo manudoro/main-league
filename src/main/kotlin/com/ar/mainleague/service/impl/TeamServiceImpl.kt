@@ -3,6 +3,7 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.PlayerDAO
 import com.ar.mainleague.dao.PlayerMongoWrapper
 import com.ar.mainleague.modelo.Player
+import com.ar.mainleague.modelo.PlayerSearchFilter
 import com.ar.mainleague.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

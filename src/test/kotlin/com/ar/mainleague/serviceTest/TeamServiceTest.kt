@@ -1,9 +1,9 @@
-package com.ar.mainleague.playerServiceTest
+package com.ar.mainleague.serviceTest
 
 import com.ar.mainleague.modelo.Position
 import com.ar.mainleague.service.PlayerService
 import com.ar.mainleague.service.TeamService
-import com.ar.mainleague.service.impl.PlayerSearchFilter
+import com.ar.mainleague.modelo.PlayerSearchFilter
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired

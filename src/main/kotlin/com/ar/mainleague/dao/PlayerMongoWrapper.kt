@@ -1,7 +1,7 @@
 package com.ar.mainleague.dao
 
 import com.ar.mainleague.modelo.PlayerMongo
-import com.ar.mainleague.service.impl.PlayerSearchFilter
+import com.ar.mainleague.modelo.PlayerSearchFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Repository
