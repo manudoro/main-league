@@ -21,5 +21,5 @@ interface UserService {
 
     fun getFormation(userId: Long): Formation
 
-    fun changePlayer(userId: Long, playerOutId: Long, playerInId: Long)
+    fun substitutePlayer(userId: Long, playerOutId: Long, playerInId: Long)
 }

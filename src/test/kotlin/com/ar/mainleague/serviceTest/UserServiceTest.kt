@@ -4,8 +4,11 @@ import com.ar.mainleague.modelo.Formation
 import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.Position
 import com.ar.mainleague.modelo.User
+import com.ar.mainleague.modelo.exceptions.InvalidReplacementException
 import com.ar.mainleague.service.PlayerService
 import com.ar.mainleague.service.UserService
+import com.ar.mainleague.service.exceptions.InvalidPickExecption
+import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
 import com.ar.mainleague.service.exceptions.UniqueException
 import com.ar.mainleague.service.impl.Cleaner
 import org.junit.jupiter.api.*
@@ -25,7 +28,17 @@ class UserServiceTest {
     private lateinit var formation : Formation
     private lateinit var manudoro : User
     private lateinit var player1 : Player
-
+    private lateinit var player2 : Player
+    private lateinit var player3 : Player
+    private lateinit var player4 : Player
+    private lateinit var player5 : Player
+    private lateinit var player6 : Player
+    private lateinit var player7 : Player
+    private lateinit var player8 : Player
+    private lateinit var player9 : Player
+    private lateinit var player10 : Player
+    private lateinit var player11 : Player
+    private lateinit var player12 : Player
 
 
 
@@ -33,19 +46,20 @@ class UserServiceTest {
     fun setUp(){
         player1 = playerService.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez")
 
-        playerService.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute")
-        playerService.inscribePlayer(Position.DEFENSE, 31, "Gaspar", "Robles")
-        playerService.inscribePlayer(Position.DEFENSE, 27, "Marcos", "Rivas")
-        playerService.inscribePlayer(Position.DEFENSE, 24, "Ivan", "Yanos")
+        player2 = playerService.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute")
+        player3 = playerService.inscribePlayer(Position.DEFENSE, 31, "Gaspar", "Robles")
+        player4 = playerService.inscribePlayer(Position.DEFENSE, 27, "Marcos", "Rivas")
+        player6 = playerService.inscribePlayer(Position.DEFENSE, 24, "Ivan", "Yanos")
 
-        playerService.inscribePlayer(Position.MIDFIELDER, 19, "Lucas", "Peralta")
-        playerService.inscribePlayer(Position.MIDFIELDER, 24, "Gastón", "Dafora")
-        playerService.inscribePlayer(Position.MIDFIELDER, 21, "Diego", "Fogra")
-        playerService.inscribePlayer(Position.MIDFIELDER, 28, "Alan", "Sian")
+        player5 = playerService.inscribePlayer(Position.MIDFIELDER, 19, "Lucas", "Peralta")
+        player10 = playerService.inscribePlayer(Position.MIDFIELDER, 24, "Gastón", "Dafora")
+        player8 = playerService.inscribePlayer(Position.MIDFIELDER, 21, "Diego", "Fogra")
+        player11 = playerService.inscribePlayer(Position.MIDFIELDER, 28, "Alan", "Sian")
 
-        playerService.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez")
-        playerService.inscribePlayer(Position.FORWARD, 35, "Nahuel", "Estevez")
+        player9 = playerService.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez")
+        player7 = playerService.inscribePlayer(Position.FORWARD, 35, "Nahuel", "Estevez")
 
+        player12 = playerService.inscribePlayer(Position.GOALKEEPER, 22, "Kevin", "Gramuglia")
 
         formation = Formation(4, 4, 2)
 
@@ -73,6 +87,52 @@ class UserServiceTest {
         Assertions.assertTrue(players.any { p -> p.id == player1.id })
     }
 
+    @Test
+    fun userCannotPickMoreThanElevenPlayers(){
+        service.pickPlayer(manudoro.id!!, player1.id!!)
+        service.pickPlayer(manudoro.id!!, player2.id!!)
+        service.pickPlayer(manudoro.id!!, player3.id!!)
+        service.pickPlayer(manudoro.id!!, player4.id!!)
+        service.pickPlayer(manudoro.id!!, player5.id!!)
+        service.pickPlayer(manudoro.id!!, player6.id!!)
+        service.pickPlayer(manudoro.id!!, player7.id!!)
+        service.pickPlayer(manudoro.id!!, player8.id!!)
+        service.pickPlayer(manudoro.id!!, player9.id!!)
+        service.pickPlayer(manudoro.id!!, player10.id!!)
+        service.pickPlayer(manudoro.id!!, player11.id!!)
+        Assertions.assertThrows(InvalidPickExecption::class.java){service.pickPlayer(manudoro.id!!, player12.id!!)}
+    }
+
+    @Test
+    fun userCanSubstitutePlayer(){
+        service.pickPlayer(manudoro.id!!, player2.id!!)
+        service.substitutePlayer(manudoro.id!!, player2.id!!, player3.id!!)
+        val manudoroTeam = service.getPlayers(manudoro.id!!)
+        Assertions.assertTrue(manudoroTeam.any { p-> p.id == player3.id })
+        Assertions.assertFalse(manudoroTeam.any { p-> p.id == player2.id })
+    }
+
+    @Test
+    fun userCannotChangePlayersFromDifferentPosition(){
+        service.pickPlayer(manudoro.id!!, player1.id!!)
+        Assertions.assertThrows(InvalidReplacementException::class.java)
+        {service.substitutePlayer(manudoro.id!!, player1.id!!, player2.id!!)}
+
+    }
+
+    @Test
+    fun userCannotSubstitutePlayerOutOfTheTeam(){
+        Assertions.assertThrows(InvalidSubstitutionException::class.java)
+        {service.substitutePlayer(manudoro.id!!, player2.id!!, player3.id!!)}
+
+    }
+
+    @Test
+    fun userCannotSubstituteTheSamePlayer(){
+        service.pickPlayer(manudoro.id!!, player1.id!!)
+        Assertions.assertThrows(InvalidSubstitutionException::class.java)
+        {service.substitutePlayer(manudoro.id!!, player1.id!!, player1.id!!)}
+    }
     @Test
     fun userCanChangeFormation(){
         val newFormation = Formation(4,5,1)

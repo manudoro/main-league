@@ -11,6 +11,7 @@ import com.ar.mainleague.modelo.PlayerSearchFilter
 import com.ar.mainleague.modelo.User
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
+import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
 import com.ar.mainleague.service.exceptions.UniqueException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -80,13 +81,15 @@ class UserServiceImpl : UserService, EntityUtils() {
         return formationDao.findByUserId(userId)
     }
 
-    override fun changePlayer(userId: Long, playerOutId: Long, playerInId: Long) {
-        if(playerDao.existsByIdInUserTeam(playerOutId, userId)){
+    override fun substitutePlayer(userId: Long, playerOutId: Long, playerInId: Long) {
+        if(playerInId != playerOutId && playerDao.existsByIdInUserTeam(playerOutId, userId)){
             val playerIn = this.findByIdOrThrow(playerDao, playerInId)
             val playerOut = this.findByIdOrThrow(playerDao, playerOutId)
             val user = this.findByIdOrThrow(userDao, userId)
             user.changePlayer(playerIn, playerOut)
             userDao.save(user)
+        } else {
+            throw InvalidSubstitutionException("Cannot substitute")
         }
     }
 
