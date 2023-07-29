@@ -15,15 +15,8 @@ data class Player(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long? = null
-    var attack : Int = 0
-    var defense : Int = 0
-    var passing : Int = 0
-    var gkSkills : Int = 0
-
-    var rating : Double = 0.0
 
     init{
-        StatsSetter.setAttributes(this)
         Validator.validatePlayer(this)
     }
 
