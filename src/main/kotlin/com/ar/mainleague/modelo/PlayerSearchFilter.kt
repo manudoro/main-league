@@ -20,8 +20,8 @@ class PlayerSearchFilter(
         fromAge?.let { criteria.and("age").gt(it) }
         toAge?.let { criteria.and("age").lt(it) }
         position?.let {criteria.and("position").`is`(it)}
-        fromRate?.let { criteria.and("rate").gt(it) }
-        toRate?.let { criteria.and("rate").lt(it) }
+        fromRate?.let { criteria.and("rating").gt(it) }
+        toRate?.let { criteria.and("rating").lt(it) }
     }
 
     init {

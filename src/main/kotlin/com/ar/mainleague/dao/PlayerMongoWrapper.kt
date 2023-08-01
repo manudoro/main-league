@@ -34,4 +34,9 @@ class PlayerMongoWrapper {
     }
 
 
+    fun findAll(): List<PlayerMongo> {
+        return playerDAO.findAll()
+    }
+
+
 }

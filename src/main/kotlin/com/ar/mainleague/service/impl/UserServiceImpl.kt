@@ -21,18 +21,12 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class UserServiceImpl : UserService, EntityUtils() {
 
-    @Autowired private lateinit var playerMongoWrapper : PlayerMongoWrapper
     @Autowired private lateinit var playerDao : PlayerDAO
     @Autowired private lateinit var formationDao : FormacionDAO
     @Autowired private lateinit var userDao : UserDAO
 
 
-    override fun researchPlayers(criteria: PlayerSearchFilter): List<Player> {
-        val players = playerMongoWrapper.searchPlayers(criteria)
-        val playersIds = players.map { p-> p.relId }
-        return playerDao.findAllById(playersIds)
 
-    }
     override fun createUser(nickname: String, formacion: Formation) : User {
         if(userDao.existsByNickname(nickname)){
             throw UniqueException("The nickname just exists, please choose another one.")

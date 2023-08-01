@@ -1,4 +1,4 @@
-package com.ar.mainleague
+package com.ar.mainleague.controllers
 
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RestController

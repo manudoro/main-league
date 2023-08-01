@@ -7,7 +7,7 @@ import com.ar.mainleague.modelo.PlayerSearchFilter
 
 interface UserService {
 
-    fun researchPlayers(criteria: PlayerSearchFilter): List<Player>
+
 
     fun createUser(nickname:String, formacion: Formation): User
 
