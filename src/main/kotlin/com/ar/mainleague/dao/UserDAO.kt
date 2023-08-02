@@ -9,8 +9,8 @@ interface UserDAO : JpaRepository<User, Long> {
 
     fun existsByNickname(nickname: String): Boolean
 
-    @Query("SELECT p FROM Player p JOIN p.users u WHERE u.id = :userId")
-    fun getPlayersByUser(userId: Long): List<Player>
+    @Query("SELECT p.id FROM Player p JOIN p.users u WHERE u.id = :userId")
+    fun getPlayersByUser(userId: Long): List<Long>
 
 
 

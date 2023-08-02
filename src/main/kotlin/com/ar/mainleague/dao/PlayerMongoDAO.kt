@@ -13,7 +13,7 @@ interface PlayerMongoDAO : MongoRepository<PlayerMongo, String> {
 
     fun findByRelId(id:Long): PlayerMongo
 
-
+    fun findAllByIdIn(ids : List<Long>) : List<PlayerMongo>
 
 
 }

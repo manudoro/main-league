@@ -25,8 +25,8 @@ class PlayerController(private val playerService : PlayerService) {
     }
 
     @GetMapping("/{id}")
-    fun getPlayer(@PathVariable id : Long?) =
-        PlayerDTO.desdeModelo(playerService.getPlayerStats(id!!))
+    fun getPlayer(@PathVariable id : Long) =
+        PlayerDTO.desdeModelo(playerService.getPlayerStats(id))
 
     @GetMapping("/search")
     fun searchPlayers(@RequestBody dto : FilterDTO) : List<PlayerDTO>{

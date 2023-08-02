@@ -38,5 +38,9 @@ class PlayerMongoWrapper {
         return playerDAO.findAll()
     }
 
+    fun findAllByIdIn(ids : List<Long>) : List<PlayerMongo> {
+        return playerDAO.findAllByIdIn(ids)
+    }
+
 
 }

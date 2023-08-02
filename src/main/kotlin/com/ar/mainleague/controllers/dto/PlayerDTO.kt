@@ -30,6 +30,8 @@ class PlayerDTO(
                 lastName = player.lastName,
                 rating = player.rating
             )
+
+
         }
 }
 

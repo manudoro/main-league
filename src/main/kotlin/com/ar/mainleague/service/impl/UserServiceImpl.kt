@@ -1,13 +1,10 @@
 package com.ar.mainleague.service.impl
 
-import com.ar.mainleague.dao.FormacionDAO
-import com.ar.mainleague.dao.PlayerDAO
-import com.ar.mainleague.dao.PlayerMongoWrapper
-import com.ar.mainleague.dao.UserDAO
+import com.ar.mainleague.dao.*
 import com.ar.mainleague.dao.utils.EntityUtils
 import com.ar.mainleague.modelo.Formation
 import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.modelo.PlayerSearchFilter
+import com.ar.mainleague.modelo.PlayerMongo
 import com.ar.mainleague.modelo.User
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
@@ -22,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserServiceImpl : UserService, EntityUtils() {
 
     @Autowired private lateinit var playerDao : PlayerDAO
+    @Autowired private lateinit var mongoDao : PlayerMongoWrapper
     @Autowired private lateinit var formationDao : FormacionDAO
     @Autowired private lateinit var userDao : UserDAO
 
@@ -39,8 +37,9 @@ class UserServiceImpl : UserService, EntityUtils() {
         return this.findByIdOrThrow(userDao, userId)
     }
 
-    override fun getPlayers(userId: Long): List<Player> {
-        return userDao.getPlayersByUser(userId)
+    override fun getPlayers(userId: Long): List<PlayerMongo> {
+        val ids = userDao.getPlayersByUser(userId)
+        return mongoDao.findAllByIdIn(ids)
     }
 
     private fun createIfNotExists(formation: Formation): Formation {

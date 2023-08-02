@@ -1,9 +1,6 @@
 package com.ar.mainleague.service
 
-import com.ar.mainleague.modelo.Formation
-import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.modelo.User
-import com.ar.mainleague.modelo.PlayerSearchFilter
+import com.ar.mainleague.modelo.*
 
 interface UserService {
 
@@ -13,7 +10,7 @@ interface UserService {
 
     fun getUser(userId : Long): User
 
-    fun getPlayers(userId: Long): List<Player>
+    fun getPlayers(userId: Long): List<PlayerMongo>
 
     fun pickPlayer(userId : Long, playerId : Long)
 
