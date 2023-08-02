@@ -39,7 +39,7 @@ class PlayerMongoWrapper {
     }
 
     fun findAllByIdIn(ids : List<Long>) : List<PlayerMongo> {
-        return playerDAO.findAllByIdIn(ids)
+        return playerDAO.findAllByRelIdIn(ids)
     }
 
 

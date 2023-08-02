@@ -84,7 +84,7 @@ class UserServiceTest {
     fun userCanPickPlayers(){
         service.pickPlayer(manudoro.id!!, player1.id!!)
         val players = service.getPlayers(manudoro.id!!)
-        Assertions.assertTrue(players.any { p -> p.id == player1.id })
+        Assertions.assertTrue(players.any { p -> p.relId == player1.id })
     }
 
     @Test
@@ -104,12 +104,23 @@ class UserServiceTest {
     }
 
     @Test
+    fun gettingUserPlayers(){
+        service.pickPlayer(manudoro.id!!, player1.id!!)
+        service.pickPlayer(manudoro.id!!, player2.id!!)
+        service.pickPlayer(manudoro.id!!, player3.id!!)
+        service.pickPlayer(manudoro.id!!, player4.id!!)
+        service.pickPlayer(manudoro.id!!, player5.id!!)
+        val team = service.getPlayers(manudoro.id!!)
+        Assertions.assertEquals(5, team.size)
+    }
+
+    @Test
     fun userCanSubstitutePlayer(){
         service.pickPlayer(manudoro.id!!, player2.id!!)
         service.substitutePlayer(manudoro.id!!, player2.id!!, player3.id!!)
         val manudoroTeam = service.getPlayers(manudoro.id!!)
-        Assertions.assertTrue(manudoroTeam.any { p-> p.id == player3.id })
-        Assertions.assertFalse(manudoroTeam.any { p-> p.id == player2.id })
+        Assertions.assertTrue(manudoroTeam.any { p-> p.relId == player3.id })
+        Assertions.assertFalse(manudoroTeam.any { p-> p.relId == player2.id })
     }
 
     @Test

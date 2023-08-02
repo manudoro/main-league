@@ -3,6 +3,7 @@ package com.ar.mainleague.modelo.utils.randomStats
 import com.ar.mainleague.modelo.PlayerMongo
 import com.ar.mainleague.modelo.Position
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 object StatsSetter {
     private fun setGKAttributes(player: PlayerMongo) {

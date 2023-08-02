@@ -27,7 +27,7 @@ class UserController(private val userService : UserService) {
     @GetMapping("/{id}")
     fun getUser(@PathVariable id : Long) = UserDTO.desdeModelo(userService.getUser(id))
 
-    @GetMapping("/{id}")
+    @GetMapping("/team/{id}")
     fun getTeam(@PathVariable id : Long) : List<PlayerDTO> {
         val team = userService.getPlayers(id)
         return team.map{p -> PlayerDTO.desdeModelo(p)}
