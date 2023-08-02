@@ -32,7 +32,7 @@ class UserController(private val userService : UserService) {
     }
 
 
-    @GetMapping("{nickname}/team/")
+    @GetMapping("{nickname}/team")
     fun getTeam(@PathVariable nickname : String) : List<PlayerDTO> {
         val team = userService.getPlayers(nickname)
         return team.map{p -> PlayerDTO.desdeModelo(p)}
@@ -49,7 +49,7 @@ class UserController(private val userService : UserService) {
         }
     }
 
-    @PutMapping("{nickname}/chageFormation")
+    @PutMapping("{nickname}/formation")
     fun changeFormation(@PathVariable nickname : String, @RequestBody dto : FormationDTO) : ResponseEntity<String> {
         return try {
             userService.changeFormation(nickname, dto.aModelo())

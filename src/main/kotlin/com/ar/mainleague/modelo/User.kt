@@ -21,6 +21,7 @@ class User(@Column(unique = true) var nickname: String, @ManyToOne var formation
 
     fun changeFormation(formation: Formation) {
         this.formation = formation
+        this.players.forEach{p -> p.removeUser(this)}
         this.players.clear()
 
     }
