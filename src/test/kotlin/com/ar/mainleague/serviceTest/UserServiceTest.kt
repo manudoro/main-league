@@ -82,73 +82,73 @@ class UserServiceTest {
 
     @Test
     fun userCanPickPlayers(){
-        service.pickPlayer(manudoro.id!!, player1.id!!)
-        val players = service.getPlayers(manudoro.id!!)
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        val players = service.getPlayers(manudoro.nickname)
         Assertions.assertTrue(players.any { p -> p.relId == player1.id })
     }
 
     @Test
     fun userCannotPickMoreThanElevenPlayers(){
-        service.pickPlayer(manudoro.id!!, player1.id!!)
-        service.pickPlayer(manudoro.id!!, player2.id!!)
-        service.pickPlayer(manudoro.id!!, player3.id!!)
-        service.pickPlayer(manudoro.id!!, player4.id!!)
-        service.pickPlayer(manudoro.id!!, player5.id!!)
-        service.pickPlayer(manudoro.id!!, player6.id!!)
-        service.pickPlayer(manudoro.id!!, player7.id!!)
-        service.pickPlayer(manudoro.id!!, player8.id!!)
-        service.pickPlayer(manudoro.id!!, player9.id!!)
-        service.pickPlayer(manudoro.id!!, player10.id!!)
-        service.pickPlayer(manudoro.id!!, player11.id!!)
-        Assertions.assertThrows(InvalidPickExecption::class.java){service.pickPlayer(manudoro.id!!, player12.id!!)}
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player2.id!!)
+        service.pickPlayer(manudoro.nickname, player3.id!!)
+        service.pickPlayer(manudoro.nickname, player4.id!!)
+        service.pickPlayer(manudoro.nickname, player5.id!!)
+        service.pickPlayer(manudoro.nickname, player6.id!!)
+        service.pickPlayer(manudoro.nickname, player7.id!!)
+        service.pickPlayer(manudoro.nickname, player8.id!!)
+        service.pickPlayer(manudoro.nickname, player9.id!!)
+        service.pickPlayer(manudoro.nickname, player10.id!!)
+        service.pickPlayer(manudoro.nickname, player11.id!!)
+        Assertions.assertThrows(InvalidPickExecption::class.java){service.pickPlayer(manudoro.nickname, player12.id!!)}
     }
 
     @Test
     fun gettingUserPlayers(){
-        service.pickPlayer(manudoro.id!!, player1.id!!)
-        service.pickPlayer(manudoro.id!!, player2.id!!)
-        service.pickPlayer(manudoro.id!!, player3.id!!)
-        service.pickPlayer(manudoro.id!!, player4.id!!)
-        service.pickPlayer(manudoro.id!!, player5.id!!)
-        val team = service.getPlayers(manudoro.id!!)
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player2.id!!)
+        service.pickPlayer(manudoro.nickname, player3.id!!)
+        service.pickPlayer(manudoro.nickname, player4.id!!)
+        service.pickPlayer(manudoro.nickname, player5.id!!)
+        val team = service.getPlayers(manudoro.nickname)
         Assertions.assertEquals(5, team.size)
     }
 
     @Test
     fun userCanSubstitutePlayer(){
-        service.pickPlayer(manudoro.id!!, player2.id!!)
-        service.substitutePlayer(manudoro.id!!, player2.id!!, player3.id!!)
-        val manudoroTeam = service.getPlayers(manudoro.id!!)
+        service.pickPlayer(manudoro.nickname, player2.id!!)
+        service.substitutePlayer(manudoro.nickname, player2.id!!, player3.id!!)
+        val manudoroTeam = service.getPlayers(manudoro.nickname)
         Assertions.assertTrue(manudoroTeam.any { p-> p.relId == player3.id })
         Assertions.assertFalse(manudoroTeam.any { p-> p.relId == player2.id })
     }
 
     @Test
     fun userCannotChangePlayersFromDifferentPosition(){
-        service.pickPlayer(manudoro.id!!, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player1.id!!)
         Assertions.assertThrows(InvalidReplacementException::class.java)
-        {service.substitutePlayer(manudoro.id!!, player1.id!!, player2.id!!)}
+        {service.substitutePlayer(manudoro.nickname, player1.id!!, player2.id!!)}
 
     }
 
     @Test
     fun userCannotSubstitutePlayerOutOfTheTeam(){
         Assertions.assertThrows(InvalidSubstitutionException::class.java)
-        {service.substitutePlayer(manudoro.id!!, player2.id!!, player3.id!!)}
+        {service.substitutePlayer(manudoro.nickname, player2.id!!, player3.id!!)}
 
     }
 
     @Test
     fun userCannotSubstituteTheSamePlayer(){
-        service.pickPlayer(manudoro.id!!, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player1.id!!)
         Assertions.assertThrows(InvalidSubstitutionException::class.java)
-        {service.substitutePlayer(manudoro.id!!, player1.id!!, player1.id!!)}
+        {service.substitutePlayer(manudoro.nickname, player1.id!!, player1.id!!)}
     }
     @Test
     fun userCanChangeFormation(){
         val newFormation = Formation(4,5,1)
-        service.changeFormation(manudoro.id!!, newFormation)
-        val formation = service.getFormation(manudoro.id!!)
+        service.changeFormation(manudoro.nickname, newFormation)
+        val formation = service.getFormation(manudoro.nickname)
         Assertions.assertEquals(4, formation.defenders)
         Assertions.assertEquals(5, formation.midfielders)
         Assertions.assertEquals(1, formation.forwards)

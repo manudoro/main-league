@@ -24,52 +24,57 @@ class UserController(private val userService : UserService) {
         }
     }
 
-    @GetMapping("/{id}")
-    fun getUser(@PathVariable id : Long) = UserDTO.desdeModelo(userService.getUser(id))
+    @GetMapping("/{nickname}")
+    fun getUser(@PathVariable nickname : String) : UserDTO {
+        val user = userService.getUserByNickname(nickname)
+        val players = userService.getPlayers(nickname)
+        return UserDTO.desdeModelo(user, players)
+    }
 
-    @GetMapping("/team/{id}")
-    fun getTeam(@PathVariable id : Long) : List<PlayerDTO> {
-        val team = userService.getPlayers(id)
+
+    @GetMapping("{nickname}/team/")
+    fun getTeam(@PathVariable nickname : String) : List<PlayerDTO> {
+        val team = userService.getPlayers(nickname)
         return team.map{p -> PlayerDTO.desdeModelo(p)}
     }
 
-    @PutMapping("/pick/{userId}/{playerId}")
-    fun pickPlayer(@PathVariable userId : Long, @PathVariable playerId : Long) : ResponseEntity<String> {
+    @PutMapping("{nickname}/pick/{playerId}")
+    fun pickPlayer(@PathVariable nickname : String, @PathVariable playerId : Long) : ResponseEntity<String> {
         return try {
-            userService.pickPlayer(userId, playerId)
-            ResponseEntity.ok("The player $playerId picked successfully by user $userId")
+            userService.pickPlayer(nickname, playerId)
+            ResponseEntity.ok("The player $playerId picked successfully by user $nickname")
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("An error occurred when picking player: ${e.message}")
         }
     }
 
-    @PutMapping("/chageFormation/{userId}")
-    fun changeFormation(@PathVariable userId : Long, @RequestBody dto : FormationDTO) : ResponseEntity<String> {
+    @PutMapping("{nickname}/chageFormation")
+    fun changeFormation(@PathVariable nickname : String, @RequestBody dto : FormationDTO) : ResponseEntity<String> {
         return try {
-            userService.changeFormation(userId, dto.aModelo())
-            ResponseEntity.ok("The user $userId changed formation succesfully")
+            userService.changeFormation(nickname, dto.aModelo())
+            ResponseEntity.ok("The user $nickname changed formation succesfully")
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("An error occurred when changing formation: ${e.message}")
         }
     }
 
-    @GetMapping("/formation/{userId}")
-    fun getFormation(@PathVariable userId: Long) : FormationDTO {
-        val formation = userService.getFormation(userId)
+    @GetMapping("{nickname}/formation")
+    fun getFormation(@PathVariable nickname: String) : FormationDTO {
+        val formation = userService.getFormation(nickname)
         return FormationDTO.desdeModelo(formation)
     }
 
-    @PutMapping("/pick/{userId}/{playerOutId}/{playerInId}")
+    @PutMapping("/{nickname}/substitute/{playerOutId}/{playerInId}")
     fun substitutePlayer(
-        @PathVariable userId : Long,
+        @PathVariable nickname : String,
         @PathVariable playerOutId : Long,
         @PathVariable playerInId : Long
     ) : ResponseEntity<String> {
         return try {
-            userService.substitutePlayer(userId, playerOutId, playerInId)
-            ResponseEntity.ok("The player $playerOutId replaced successfully by ${playerInId} in user $userId team")
+            userService.substitutePlayer(nickname, playerOutId, playerInId)
+            ResponseEntity.ok("The player $playerOutId replaced successfully by ${playerInId} in user $nickname team")
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("An error occurred when replacing player: ${e.message}")

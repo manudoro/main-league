@@ -10,13 +10,15 @@ interface UserService {
 
     fun getUser(userId : Long): User
 
-    fun getPlayers(userId: Long): List<PlayerMongo>
+    fun getUserByNickname(nickname : String) : User
 
-    fun pickPlayer(userId : Long, playerId : Long)
+    fun getPlayers(nickname: String): List<PlayerMongo>
 
-    fun changeFormation(userId: Long, formation:Formation)
+    fun pickPlayer(nickname: String, playerId : Long)
 
-    fun getFormation(userId: Long): Formation
+    fun changeFormation(nickname: String, formation:Formation)
 
-    fun substitutePlayer(userId: Long, playerOutId: Long, playerInId: Long)
+    fun getFormation(nickname: String): Formation
+
+    fun substitutePlayer(nickname: String, playerOutId: Long, playerInId: Long)
 }

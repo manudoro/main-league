@@ -3,7 +3,6 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.*
 import com.ar.mainleague.dao.utils.EntityUtils
 import com.ar.mainleague.modelo.Formation
-import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.PlayerMongo
 import com.ar.mainleague.modelo.User
 import com.ar.mainleague.service.UserService
@@ -37,8 +36,12 @@ class UserServiceImpl : UserService, EntityUtils() {
         return this.findByIdOrThrow(userDao, userId)
     }
 
-    override fun getPlayers(userId: Long): List<PlayerMongo> {
-        val ids = userDao.getPlayersByUser(userId)
+    override fun getUserByNickname(nickname: String): User {
+        return userDao.findByNickname(nickname) ?: throw NoSuchElementException("User $nickname not found")
+    }
+
+    override fun getPlayers(nickname: String): List<PlayerMongo> {
+        val ids = userDao.getPlayersByUser(nickname)
         return mongoDao.findAllByIdIn(ids)
     }
 
@@ -49,13 +52,13 @@ class UserServiceImpl : UserService, EntityUtils() {
         }
     }
 
-    override fun pickPlayer(userId: Long, playerId: Long) {
-        val user = this.findByIdOrThrow(userDao, userId)
+    override fun pickPlayer(nickname: String, playerId: Long) {
+        val user = this.getUserByNickname(nickname)
         val player = this.findByIdOrThrow(playerDao, playerId)
-        val playersOnPosition = playerDao.countByPositionAndUserId(player.position, userId)
+        val playersOnPosition = playerDao.countByPositionAndUserId(player.position, user.id!!)
         val formation = user.formation
         if(formation.allowsPick(playersOnPosition, player.position)){
-            user!!.pick(player)
+            user.pick(player)
             userDao.save(user)
         } else{
             throw InvalidPickExecption("Too much players on that position.")
@@ -63,22 +66,22 @@ class UserServiceImpl : UserService, EntityUtils() {
 
     }
 
-    override fun changeFormation(userId: Long, formation: Formation) {
-        val user = this.findByIdOrThrow(userDao, userId)
+    override fun changeFormation(nickname: String, formation: Formation) {
+        val user = this.getUserByNickname(nickname)
         user.changeFormation(createIfNotExists(formation))
         userDao.save(user)
 
     }
 
-    override fun getFormation(userId: Long): Formation {
-        return formationDao.findByUserId(userId)
+    override fun getFormation(nickname: String): Formation {
+        return formationDao.findByUserId(nickname)
     }
 
-    override fun substitutePlayer(userId: Long, playerOutId: Long, playerInId: Long) {
-        if(playerInId != playerOutId && playerDao.existsByIdInUserTeam(playerOutId, userId)){
+    override fun substitutePlayer(nickname: String, playerOutId: Long, playerInId: Long) {
+        if(playerInId != playerOutId && playerDao.existsByIdInUserTeam(playerOutId, nickname)){
             val playerIn = this.findByIdOrThrow(playerDao, playerInId)
             val playerOut = this.findByIdOrThrow(playerDao, playerOutId)
-            val user = this.findByIdOrThrow(userDao, userId)
+            val user = this.getUserByNickname(nickname)
             user.changePlayer(playerIn, playerOut)
             userDao.save(user)
         } else {
