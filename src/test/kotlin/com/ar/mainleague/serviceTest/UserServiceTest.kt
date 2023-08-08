@@ -4,12 +4,10 @@ import com.ar.mainleague.modelo.Formation
 import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.Position
 import com.ar.mainleague.modelo.User
-import com.ar.mainleague.modelo.exceptions.InvalidReplacementException
+import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
 import com.ar.mainleague.service.PlayerService
-import com.ar.mainleague.service.RoundService
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
-import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
 import com.ar.mainleague.service.exceptions.UniqueException
 import com.ar.mainleague.service.impl.Cleaner
 import org.junit.jupiter.api.*
@@ -26,7 +24,6 @@ class UserServiceTest {
     @Autowired private lateinit var cleaner: Cleaner
     @Autowired private lateinit var service: UserService
     @Autowired private lateinit var playerService : PlayerService
-    @Autowired private lateinit var roundService : RoundService
     private lateinit var formation : Formation
     private lateinit var manudoro : User
     private lateinit var player1 : Player
@@ -77,9 +74,9 @@ class UserServiceTest {
 
     @Test
     fun noEsPosiblePersistirUsuariosConElMismoNickname(){
-        service.createUser("manudoro", formation)
+        service.createUser("johnrhcp", formation)
 
-        Assertions.assertThrows(UniqueException::class.java){service.createUser("manudoro", formation)}
+        Assertions.assertThrows(UniqueException::class.java){service.createUser("johnrhcp", formation)}
     }
 
     @Test
@@ -128,7 +125,7 @@ class UserServiceTest {
     @Test
     fun userCannotChangePlayersFromDifferentPosition(){
         service.pickPlayer(manudoro.nickname, player1.id!!)
-        Assertions.assertThrows(InvalidReplacementException::class.java)
+        Assertions.assertThrows(InvalidSubstitutionException::class.java)
         {service.substitutePlayer(manudoro.nickname, player1.id!!, player2.id!!)}
 
     }
@@ -157,10 +154,51 @@ class UserServiceTest {
     }
 
     @Test
-    fun playRound(){
-        roundService.playRound()
-        return
+    fun changingFormationResetUserTeam(){
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player2.id!!)
+        val oldTeam = service.getPlayers(manudoro.nickname)
+        val newFormation = Formation(4,5,1)
+        service.changeFormation(manudoro.nickname, newFormation)
+        val team = service.getPlayers(manudoro.nickname)
+        Assertions.assertEquals(2, oldTeam.size)
+        Assertions.assertEquals(0, team.size)
+
     }
+
+    @Test
+    fun changingFormationResetUserBudget(){
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        service.pickPlayer(manudoro.nickname, player2.id!!)
+        val olderUser = service.getUserByNickname(manudoro.nickname)
+        val newFormation = Formation(4,5,1)
+        service.changeFormation(manudoro.nickname, newFormation)
+        val user = service.getUserByNickname(manudoro.nickname)
+        Assertions.assertTrue(olderUser.budget < 700.0)
+        Assertions.assertTrue(user.budget == 700.0)
+
+    }
+
+    @Test
+    fun pickPlayerReduceUserBudget(){
+        val oldBudget = manudoro.budget
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        val userBudget = service.getUserBudget(manudoro.nickname)
+        Assertions.assertTrue(userBudget == oldBudget - player1.rating)
+    }
+
+    @Test
+    fun substitutePlayerReduceUserBudget(){
+        val oldBudget = manudoro.budget
+        service.pickPlayer(manudoro.nickname, player1.id!!)
+        val userBudget = service.getUserBudget(manudoro.nickname)
+        Assertions.assertTrue(userBudget == oldBudget - player1.rating)
+        service.substitutePlayer(manudoro.nickname, player1.id!!, player12.id!!)
+        val newestBudget = service.getUserBudget(manudoro.nickname)
+        Assertions.assertTrue(newestBudget == userBudget - player12.rating + player1.rating)
+
+    }
+
 
     @AfterEach
     fun clearUp(){

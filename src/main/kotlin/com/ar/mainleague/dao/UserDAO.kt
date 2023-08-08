@@ -14,5 +14,8 @@ interface UserDAO : JpaRepository<User, Long> {
 
     fun findByNickname(nickname: String) : User?
 
+    @Query("SELECT u.budget FROM User u WHERE u.nickname = :nickname")
+    fun findBudgetByNickname(nickname: String): Double
+
 
 }

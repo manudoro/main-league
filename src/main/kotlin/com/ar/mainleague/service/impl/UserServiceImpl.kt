@@ -5,7 +5,7 @@ import com.ar.mainleague.dao.utils.EntityUtils
 import com.ar.mainleague.modelo.Formation
 import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.User
-import com.ar.mainleague.modelo.exceptions.NoAffordablePlayerException
+import com.ar.mainleague.service.exceptions.NoAffordablePlayerException
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
 import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
@@ -35,6 +35,10 @@ class UserServiceImpl : UserService, EntityUtils() {
 
     override fun getUser(userId: Long): User {
         return this.findByIdOrThrow(userDao, userId)
+    }
+
+    override fun getUserBudget(nickname: String): Double {
+        return userDao.findBudgetByNickname(nickname)
     }
 
     override fun getUserByNickname(nickname: String): User {
@@ -86,13 +90,12 @@ class UserServiceImpl : UserService, EntityUtils() {
             throw InvalidSubstitutionException(
                 "Trying to substitute the same player or a player that don't belong to user team")
         }
-        val user = this.getUserByNickname(nickname)
-        if(!user.canAfford(playerDao.findRatingById(playerInId) - playerDao.findRatingById(playerOutId))){
-            throw NoAffordablePlayerException("The user $nickname can't afford this substitution.")
-        }
         val playerIn = this.findByIdOrThrow(playerDao, playerInId)
         val playerOut = this.findByIdOrThrow(playerDao, playerOutId)
-
+        val user = this.getUserByNickname(nickname)
+        if(!user.canAfford(playerIn.rating - playerOut.rating)){
+            throw NoAffordablePlayerException("The user $nickname can't afford this substitution.")
+        }
         if(playerIn.position != playerOut.position){
             throw InvalidSubstitutionException("The players must play in the same position")
         }

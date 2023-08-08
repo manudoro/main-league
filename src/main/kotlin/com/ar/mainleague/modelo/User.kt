@@ -1,7 +1,5 @@
 package com.ar.mainleague.modelo
 
-import com.ar.mainleague.modelo.exceptions.InvalidReplacementException
-import com.ar.mainleague.modelo.exceptions.NoAffordablePlayerException
 import javax.persistence.*
 
 @Entity

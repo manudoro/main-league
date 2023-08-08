@@ -10,6 +10,8 @@ interface UserService {
 
     fun getUser(userId : Long): User
 
+    fun getUserBudget(nickname: String): Double
+
     fun getUserByNickname(nickname : String) : User
 
     fun getPlayers(nickname: String): List<PlayerOverview>

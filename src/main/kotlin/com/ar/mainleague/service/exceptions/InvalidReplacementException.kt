@@ -1,4 +1,4 @@
-package com.ar.mainleague.modelo.exceptions
+package com.ar.mainleague.service.exceptions
 
 class InvalidReplacementException(messageError: String) : Exception(messageError) {
 

@@ -1,6 +1,6 @@
 package com.ar.mainleague.modelo
 
-import com.ar.mainleague.modelo.exceptions.InvalidFormationException
+import com.ar.mainleague.service.exceptions.InvalidFormationException
 import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
