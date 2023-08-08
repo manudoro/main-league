@@ -1,7 +1,6 @@
 package com.ar.mainleague.modelo
 
 import com.ar.mainleague.modelo.utils.Validator
-import com.ar.mainleague.modelo.utils.randomStats.StatsSetter
 import javax.persistence.*
 
 @Entity
@@ -9,7 +8,8 @@ data class Player(
     var position: Position,
     var age: Int,
     var name: String,
-    var lastName: String) {
+    var lastName: String,
+    var rating: Double) {
 
 
     @Id
@@ -27,8 +27,8 @@ data class Player(
         users.add(user)
     }
 
-    fun removeUser(user: User) {
-        users.removeIf{u-> u.id == user.id}
+    fun removeUserById(userId: Long) {
+        users.removeIf{u-> u.id == userId}
 
     }
 

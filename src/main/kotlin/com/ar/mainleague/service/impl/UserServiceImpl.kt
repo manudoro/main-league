@@ -3,8 +3,9 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.*
 import com.ar.mainleague.dao.utils.EntityUtils
 import com.ar.mainleague.modelo.Formation
-import com.ar.mainleague.modelo.PlayerMongo
+import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.User
+import com.ar.mainleague.modelo.exceptions.NoAffordablePlayerException
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
 import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
@@ -40,7 +41,7 @@ class UserServiceImpl : UserService, EntityUtils() {
         return userDao.findByNickname(nickname) ?: throw NoSuchElementException("User $nickname not found")
     }
 
-    override fun getPlayers(nickname: String): List<PlayerMongo> {
+    override fun getPlayers(nickname: String): List<PlayerOverview> {
         val ids = userDao.getPlayersByUser(nickname)
         return mongoDao.findAllByIdIn(ids)
     }
@@ -57,12 +58,15 @@ class UserServiceImpl : UserService, EntityUtils() {
         val player = this.findByIdOrThrow(playerDao, playerId)
         val playersOnPosition = playerDao.countByPositionAndUserId(player.position, user.id!!)
         val formation = user.formation
-        if(formation.allowsPick(playersOnPosition, player.position)){
-            user.pick(player)
-            userDao.save(user)
-        } else{
+        if(!formation.allowsPick(playersOnPosition, player.position)){
             throw InvalidPickExecption("Too much players on that position.")
         }
+        if(!user.canAfford(player.rating)){
+            throw NoAffordablePlayerException("The user $nickname can't afford this player.")
+        }
+        user.pay(player.rating)
+        user.pick(player)
+        userDao.save(user)
 
     }
 
@@ -74,19 +78,27 @@ class UserServiceImpl : UserService, EntityUtils() {
     }
 
     override fun getFormation(nickname: String): Formation {
-        return formationDao.findByUserId(nickname)
+        return formationDao.findByUserNickname(nickname)
     }
 
     override fun substitutePlayer(nickname: String, playerOutId: Long, playerInId: Long) {
-        if(playerInId != playerOutId && playerDao.existsByIdInUserTeam(playerOutId, nickname)){
-            val playerIn = this.findByIdOrThrow(playerDao, playerInId)
-            val playerOut = this.findByIdOrThrow(playerDao, playerOutId)
-            val user = this.getUserByNickname(nickname)
-            user.changePlayer(playerIn, playerOut)
-            userDao.save(user)
-        } else {
-            throw InvalidSubstitutionException("Cannot substitute")
+        if(playerInId == playerOutId || !playerDao.existsByIdInUserTeam(playerOutId, nickname)){
+            throw InvalidSubstitutionException(
+                "Trying to substitute the same player or a player that don't belong to user team")
         }
+        val user = this.getUserByNickname(nickname)
+        if(!user.canAfford(playerDao.findRatingById(playerInId) - playerDao.findRatingById(playerOutId))){
+            throw NoAffordablePlayerException("The user $nickname can't afford this substitution.")
+        }
+        val playerIn = this.findByIdOrThrow(playerDao, playerInId)
+        val playerOut = this.findByIdOrThrow(playerDao, playerOutId)
+
+        if(playerIn.position != playerOut.position){
+            throw InvalidSubstitutionException("The players must play in the same position")
+        }
+        user.changePlayer(playerIn, playerOut)
+        userDao.save(user)
+
     }
 
 }

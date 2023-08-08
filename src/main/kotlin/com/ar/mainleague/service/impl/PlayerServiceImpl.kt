@@ -3,7 +3,7 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.PlayerDAO
 import com.ar.mainleague.dao.PlayerMongoWrapper
 import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.modelo.PlayerMongo
+import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.PlayerSearchFilter
 import com.ar.mainleague.modelo.Position
 import com.ar.mainleague.service.PlayerService
@@ -20,11 +20,12 @@ class PlayerServiceImpl : PlayerService, EntentyUtils(){
 
 
     override fun inscribePlayer(pos: Position, age: Int, name: String, lastName: String) : Player {
-        val player = Player(pos, age, name, lastName)
+        val playerOverview = PlayerOverview(name, lastName, age, pos)
+        var player = Player(pos, age, name, lastName, playerOverview.rating)
 
-        dao.save(player)
-        val playerMongo = PlayerMongo(player.id!!, name, lastName, age, pos)
-        mongoDao.save(playerMongo)
+        player = dao.save(player)
+        playerOverview.relId = player.id
+        mongoDao.save(playerOverview)
         return player
     }
 
@@ -32,17 +33,17 @@ class PlayerServiceImpl : PlayerService, EntentyUtils(){
         return this.findByIdOrThrow(dao, id)
     }
 
-    override fun getPlayerStats(id: Long): PlayerMongo {
+    override fun getPlayerStats(id: Long): PlayerOverview {
         return mongoDao.findByRelId(id)
     }
 
 
 
-    override fun getAll(): List<PlayerMongo> {
+    override fun getAll(): List<PlayerOverview> {
         return mongoDao.findAll()
     }
 
-    override fun researchPlayers(criteria: PlayerSearchFilter): List<PlayerMongo> {
+    override fun researchPlayers(criteria: PlayerSearchFilter): List<PlayerOverview> {
         return mongoDao.searchPlayers(criteria)
 
 

@@ -1,6 +1,7 @@
 package com.ar.mainleague.modelo
 
 import com.ar.mainleague.modelo.exceptions.InvalidReplacementException
+import com.ar.mainleague.modelo.exceptions.NoAffordablePlayerException
 import javax.persistence.*
 
 @Entity
@@ -10,6 +11,8 @@ class User(@Column(unique = true) var nickname: String, @ManyToOne var formation
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    var budget : Double = 700.0
 
     @ManyToMany(mappedBy = "users", cascade = [CascadeType.ALL],  fetch = FetchType.EAGER)
     var players : MutableSet<Player> = mutableSetOf()
@@ -21,20 +24,36 @@ class User(@Column(unique = true) var nickname: String, @ManyToOne var formation
 
     fun changeFormation(formation: Formation) {
         this.formation = formation
-        this.players.forEach{p -> p.removeUser(this)}
+        this.players.forEach{p -> p.removeUserById(this.id!!)}
         this.players.clear()
+        resetBudget()
 
     }
 
+    private fun resetBudget() {
+        budget = 700.0
+    }
+
     fun changePlayer(playerIn : Player, playerOut : Player) {
-        if(playerIn.position == playerOut.position){
+            paySubstitution(playerIn.rating, playerOut.rating)
             players.removeIf { p -> p.id == playerOut.id }
             players.add(playerIn)
-            playerOut.removeUser(this)
+            playerOut.removeUserById(this.id!!)
             playerIn.addUser(this)
-        } else{
-            throw InvalidReplacementException("The players must play in the same position")
-        }
+
+    }
+
+    private fun paySubstitution(playerInRating: Double, playerOutRating: Double) {
+        budget += (playerOutRating - playerInRating)
+    }
+
+    fun pay(rating: Double){
+        budget -= rating
+    }
+
+    fun canAfford(rating: Double): Boolean {
+        return budget >= rating
+
     }
 
 

@@ -1,7 +1,7 @@
 package com.ar.mainleague.controllers.dto
 
 import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.modelo.PlayerMongo
+import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.Position
 
 class PlayerDTO(
@@ -13,7 +13,7 @@ class PlayerDTO(
     val rating : Double) {
 
     fun aModelo() : Player {
-        val player = Player(position, age, name, lastName)
+        val player = Player(position, age, name, lastName, rating)
         if(playerId != null){
             player.id = playerId
         }
@@ -21,7 +21,7 @@ class PlayerDTO(
     }
 
     companion object{
-        fun desdeModelo(player : PlayerMongo) =
+        fun desdeModelo(player : PlayerOverview) =
             PlayerDTO(
                 playerId = player.relId,
                 position = player.position,

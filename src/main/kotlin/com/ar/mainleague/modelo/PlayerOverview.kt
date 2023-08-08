@@ -5,8 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("player")
-class PlayerMongo(
-        var relId: Long,
+class PlayerOverview(
         var name: String,
         var lastName: String,
         var age: Int,
@@ -14,6 +13,7 @@ class PlayerMongo(
 ) {
      @Id
      var id : String? = null
+     var relId: Long? = null
      var attack : Int = 0
      var defense : Int = 0
      var passing : Int = 0

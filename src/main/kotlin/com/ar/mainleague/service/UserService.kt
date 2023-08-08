@@ -12,7 +12,7 @@ interface UserService {
 
     fun getUserByNickname(nickname : String) : User
 
-    fun getPlayers(nickname: String): List<PlayerMongo>
+    fun getPlayers(nickname: String): List<PlayerOverview>
 
     fun pickPlayer(nickname: String, playerId : Long)
 

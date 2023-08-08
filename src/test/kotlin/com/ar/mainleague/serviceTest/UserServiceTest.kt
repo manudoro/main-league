@@ -6,6 +6,7 @@ import com.ar.mainleague.modelo.Position
 import com.ar.mainleague.modelo.User
 import com.ar.mainleague.modelo.exceptions.InvalidReplacementException
 import com.ar.mainleague.service.PlayerService
+import com.ar.mainleague.service.RoundService
 import com.ar.mainleague.service.UserService
 import com.ar.mainleague.service.exceptions.InvalidPickExecption
 import com.ar.mainleague.service.exceptions.InvalidSubstitutionException
@@ -25,6 +26,7 @@ class UserServiceTest {
     @Autowired private lateinit var cleaner: Cleaner
     @Autowired private lateinit var service: UserService
     @Autowired private lateinit var playerService : PlayerService
+    @Autowired private lateinit var roundService : RoundService
     private lateinit var formation : Formation
     private lateinit var manudoro : User
     private lateinit var player1 : Player
@@ -152,6 +154,12 @@ class UserServiceTest {
         Assertions.assertEquals(4, formation.defenders)
         Assertions.assertEquals(5, formation.midfielders)
         Assertions.assertEquals(1, formation.forwards)
+    }
+
+    @Test
+    fun playRound(){
+        roundService.playRound()
+        return
     }
 
     @AfterEach

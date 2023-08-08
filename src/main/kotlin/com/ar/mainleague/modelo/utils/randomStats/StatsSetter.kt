@@ -1,38 +1,37 @@
 package com.ar.mainleague.modelo.utils.randomStats
 
-import com.ar.mainleague.modelo.PlayerMongo
+import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.Position
 import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 object StatsSetter {
-    private fun setGKAttributes(player: PlayerMongo) {
+    private fun setGKAttributes(player: PlayerOverview) {
         player.attack = (0..40).random()
         player.defense = (35..75).random()
         player.passing = (30..60).random()
         player.gkSkills = (75..99).random()
     }
-    private fun setDFAttributes(player: PlayerMongo) {
+    private fun setDFAttributes(player: PlayerOverview) {
         player.attack = (40..75).random()
         player.defense = (70..99).random()
         player.passing = (40..75).random()
         player.gkSkills = (0..40).random()
     }
-    private fun setMFAttributes(player: PlayerMongo) {
+    private fun setMFAttributes(player: PlayerOverview) {
         player.attack =   (50..90).random()
         player.defense =  (50..90).random()
         player.passing =  (50..90).random()
         player.gkSkills = (0.. 40).random()
 
     }
-    private fun setFWAttributes(player: PlayerMongo) {
+    private fun setFWAttributes(player: PlayerOverview) {
         player.attack =   (70..99).random()
         player.defense =  (20..60).random()
         player.passing =  (65..85).random()
         player.gkSkills = (0.. 40).random()
 
     }
-    fun setAttributes(player: PlayerMongo) {
+    fun setAttributes(player: PlayerOverview) {
         when(player.position){
             Position.GOALKEEPER -> setGKAttributes(player)
             Position.DEFENSE -> setDFAttributes(player)
@@ -41,7 +40,7 @@ object StatsSetter {
         }
         rate(player)
     }
-    private fun rate(player: PlayerMongo): Double{
+    private fun rate(player: PlayerOverview): Double{
         val rating = (player.attack + player.defense + player.passing +player.gkSkills) / 3.0 - (player.age / 2.0)
         val decimalFormat = DecimalFormat("#.##")
         val formattedRating = decimalFormat.format(rating).toDouble()
