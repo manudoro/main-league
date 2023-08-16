@@ -1,7 +1,6 @@
 package com.ar.mainleague.controllers.dto
 
 import com.ar.mainleague.modelo.Player
-import com.ar.mainleague.modelo.PlayerOverview
 import com.ar.mainleague.modelo.Position
 
 class PlayerDTO(
@@ -21,9 +20,9 @@ class PlayerDTO(
     }
 
     companion object{
-        fun desdeModelo(player : PlayerOverview) =
+        fun desdeModelo(player : Player) =
             PlayerDTO(
-                playerId = player.relId,
+                playerId = player.id,
                 position = player.position,
                 age = player.age,
                 name = player.name,

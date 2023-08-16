@@ -21,12 +21,12 @@ class PlayerServiceTest {
 
     @BeforeEach
     fun setUp(){
-        lopez = service.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez")
-        service.inscribePlayer(Position.FORWARD, 25, "Gabriel", "Garcia")
-        service.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute")
-        service.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez")
-        service.inscribePlayer(Position.MIDFIELDER, 19, "Diego", "Fogra")
-        service.inscribePlayer(Position.MIDFIELDER, 24, "Alan", "Sian")
+        lopez = service.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez",73.0)
+        service.inscribePlayer(Position.FORWARD, 25, "Gabriel", "Garcia",62.0)
+        service.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute",65.0)
+        service.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez",52.0)
+        service.inscribePlayer(Position.MIDFIELDER, 19, "Diego", "Fogra", 58.0)
+        service.inscribePlayer(Position.MIDFIELDER, 24, "Alan", "Sian",86.0)
     }
 
     @Test
@@ -38,25 +38,25 @@ class PlayerServiceTest {
     @Test
     fun seIntentaInscribirUnJugadorMenorDe18(){
         Assertions.assertThrows(InvalidAgeException::class.java
-        ) { service.inscribePlayer(Position.MIDFIELDER, 12, "Alan", "Sian") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 12, "Alan", "Sian",73.0) }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorMayorDe45(){
         Assertions.assertThrows(InvalidAgeException::class.java
-        ) { service.inscribePlayer(Position.MIDFIELDER, 70, "Alan", "Sian") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 70, "Alan", "Sian", 82.0) }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorConNombreEnBlanco(){
         Assertions.assertThrows(BlankFieldException::class.java
-        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "", "Gomez") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "", "Gomez", 74.0) }
     }
 
     @Test
     fun seIntentaInscribirUnJugadorConApellidoEnBlanco(){
         Assertions.assertThrows(BlankFieldException::class.java
-        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "Pedro", "") }
+        ) { service.inscribePlayer(Position.MIDFIELDER, 20, "Pedro", "", 91.0) }
     }
 
 

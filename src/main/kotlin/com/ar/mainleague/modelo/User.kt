@@ -12,18 +12,24 @@ class User(@Column(unique = true) var nickname: String, @ManyToOne var formation
 
     var budget : Double = 700.0
 
+    var readyToPlay : Boolean = false
+
     @ManyToMany(mappedBy = "users", cascade = [CascadeType.ALL],  fetch = FetchType.EAGER)
     var players : MutableSet<Player> = mutableSetOf()
 
     fun pick(player: Player) {
         players.add(player)
         player.addUser(this)
+        if(fullTeam()){
+            readyToPlay = true
+        }
     }
 
     fun changeFormation(formation: Formation) {
         this.formation = formation
         this.players.forEach{p -> p.removeUserById(this.id!!)}
         this.players.clear()
+        this.readyToPlay = false
         resetBudget()
 
     }
@@ -52,6 +58,10 @@ class User(@Column(unique = true) var nickname: String, @ManyToOne var formation
     fun canAfford(rating: Double): Boolean {
         return budget >= rating
 
+    }
+
+    fun fullTeam(): Boolean {
+        return this.players.size == 11
     }
 
 

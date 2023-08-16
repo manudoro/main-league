@@ -43,22 +43,22 @@ class UserServiceTest {
 
     @BeforeEach
     fun setUp(){
-        player1 = playerService.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez")
+        player1 = playerService.inscribePlayer(Position.GOALKEEPER, 29, "Martin", "Perez",60.0)
 
-        player2 = playerService.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute")
-        player3 = playerService.inscribePlayer(Position.DEFENSE, 31, "Gaspar", "Robles")
-        player4 = playerService.inscribePlayer(Position.DEFENSE, 27, "Marcos", "Rivas")
-        player6 = playerService.inscribePlayer(Position.DEFENSE, 24, "Ivan", "Yanos")
+        player2 = playerService.inscribePlayer(Position.DEFENSE, 34, "Luciano", "Aute",73.0)
+        player3 = playerService.inscribePlayer(Position.DEFENSE, 31, "Gaspar", "Robles",55.0)
+        player4 = playerService.inscribePlayer(Position.DEFENSE, 27, "Marcos", "Rivas",62.0)
+        player6 = playerService.inscribePlayer(Position.DEFENSE, 24, "Ivan", "Yanos",13.0)
 
-        player5 = playerService.inscribePlayer(Position.MIDFIELDER, 19, "Lucas", "Peralta")
-        player10 = playerService.inscribePlayer(Position.MIDFIELDER, 24, "Gastón", "Dafora")
-        player8 = playerService.inscribePlayer(Position.MIDFIELDER, 21, "Diego", "Fogra")
-        player11 = playerService.inscribePlayer(Position.MIDFIELDER, 28, "Alan", "Sian")
+        player5 = playerService.inscribePlayer(Position.MIDFIELDER, 19, "Lucas", "Peralta",70.0)
+        player10 = playerService.inscribePlayer(Position.MIDFIELDER, 24, "Gastón", "Dafora",67.0)
+        player8 = playerService.inscribePlayer(Position.MIDFIELDER, 21, "Diego", "Fogra",52.0)
+        player11 = playerService.inscribePlayer(Position.MIDFIELDER, 28, "Alan", "Sian",60.0)
 
-        player9 = playerService.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez")
-        player7 = playerService.inscribePlayer(Position.FORWARD, 35, "Nahuel", "Estevez")
+        player9 = playerService.inscribePlayer(Position.FORWARD, 18, "Gabriel", "Lopez",56.0)
+        player7 = playerService.inscribePlayer(Position.FORWARD, 35, "Nahuel", "Estevez",73.0)
 
-        player12 = playerService.inscribePlayer(Position.GOALKEEPER, 22, "Kevin", "Gramuglia")
+        player12 = playerService.inscribePlayer(Position.GOALKEEPER, 22, "Kevin", "Gramuglia",64.0)
 
         formation = Formation(4, 4, 2)
 
@@ -83,7 +83,7 @@ class UserServiceTest {
     fun userCanPickPlayers(){
         service.pickPlayer(manudoro.nickname, player1.id!!)
         val players = service.getPlayers(manudoro.nickname)
-        Assertions.assertTrue(players.any { p -> p.relId == player1.id })
+        Assertions.assertTrue(players.any { p -> p.id == player1.id })
     }
 
     @Test
@@ -118,8 +118,8 @@ class UserServiceTest {
         service.pickPlayer(manudoro.nickname, player2.id!!)
         service.substitutePlayer(manudoro.nickname, player2.id!!, player3.id!!)
         val manudoroTeam = service.getPlayers(manudoro.nickname)
-        Assertions.assertTrue(manudoroTeam.any { p-> p.relId == player3.id })
-        Assertions.assertFalse(manudoroTeam.any { p-> p.relId == player2.id })
+        Assertions.assertTrue(manudoroTeam.any { p-> p.id == player3.id })
+        Assertions.assertFalse(manudoroTeam.any { p-> p.id == player2.id })
     }
 
     @Test

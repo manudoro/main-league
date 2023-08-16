@@ -1,6 +1,7 @@
 package com.ar.mainleague.service.impl
 
-import com.ar.mainleague.dao.PlayerMongoDAO
+import com.ar.mainleague.dao.RoundDAO
+import com.ar.mainleague.dao.RoundTableDAO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
@@ -12,11 +13,13 @@ import javax.transaction.Transactional
 @Transactional
 class CleanerImpl : Cleaner {
     @Autowired lateinit var dataDAO: DataDAO
-    @Autowired lateinit var mongoDAO: PlayerMongoDAO
+    @Autowired lateinit var roundDAO: RoundDAO
+    @Autowired lateinit var roundTableDAO: RoundTableDAO
 
     override fun cleanDB() {
         dataDAO.clear()
-        mongoDAO.deleteAll()
+        roundDAO.deleteAll()
+        roundTableDAO.deleteAll()
     }
 }
 

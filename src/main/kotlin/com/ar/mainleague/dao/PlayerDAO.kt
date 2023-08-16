@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PlayerDAO : JpaRepository<Player, Long>{
 
-
-
     @Query("SELECT COUNT(p) FROM Player p JOIN p.users u WHERE u.id = :userId AND p.position = :position")
     fun countByPositionAndUserId(position: Position, userId: Long): Int
 

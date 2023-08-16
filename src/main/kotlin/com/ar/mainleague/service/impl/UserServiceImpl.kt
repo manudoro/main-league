@@ -3,7 +3,7 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.*
 import com.ar.mainleague.dao.utils.EntityUtils
 import com.ar.mainleague.modelo.Formation
-import com.ar.mainleague.modelo.PlayerOverview
+import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.User
 import com.ar.mainleague.service.exceptions.NoAffordablePlayerException
 import com.ar.mainleague.service.UserService
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserServiceImpl : UserService, EntityUtils() {
 
     @Autowired private lateinit var playerDao : PlayerDAO
-    @Autowired private lateinit var mongoDao : PlayerMongoWrapper
+    //@Autowired private lateinit var mongoDao : PlayerMongoWrapper
     @Autowired private lateinit var formationDao : FormacionDAO
     @Autowired private lateinit var userDao : UserDAO
 
@@ -45,9 +45,9 @@ class UserServiceImpl : UserService, EntityUtils() {
         return userDao.findByNickname(nickname) ?: throw NoSuchElementException("User $nickname not found")
     }
 
-    override fun getPlayers(nickname: String): List<PlayerOverview> {
-        val ids = userDao.getPlayersByUser(nickname)
-        return mongoDao.findAllByIdIn(ids)
+    override fun getPlayers(nickname: String): List<Player> {
+        //val ids = userDao.getPlayersByUser(nickname)
+        return userDao.getPlayersByUser(nickname)
     }
 
     private fun createIfNotExists(formation: Formation): Formation {

@@ -3,7 +3,9 @@ package com.ar.mainleague.dao
 import com.ar.mainleague.modelo.Formation
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.stereotype.Repository
 
+@Repository
 interface FormacionDAO : JpaRepository<Formation, Long> {
 
     fun findByDefendersAndMidfieldersAndAndForwards(defenders : Int, midfielders : Int, forwards : Int) : Formation?

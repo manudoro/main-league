@@ -27,18 +27,17 @@ class UserController(private val userService : UserService) {
     @GetMapping("/{nickname}")
     fun getUser(@PathVariable nickname : String) : UserDTO {
         val user = userService.getUserByNickname(nickname)
-        val players = userService.getPlayers(nickname)
-        return UserDTO.desdeModelo(user, players)
+        return UserDTO.desdeModelo(user)
     }
 
 
-    @GetMapping("{nickname}/team")
+    @GetMapping("/{nickname}/team")
     fun getTeam(@PathVariable nickname : String) : List<PlayerDTO> {
         val team = userService.getPlayers(nickname)
         return team.map{p -> PlayerDTO.desdeModelo(p)}
     }
 
-    @PutMapping("{nickname}/pick/{playerId}")
+    @PutMapping("/{nickname}/pick/{playerId}")
     fun pickPlayer(@PathVariable nickname : String, @PathVariable playerId : Long) : ResponseEntity<String> {
         return try {
             userService.pickPlayer(nickname, playerId)
@@ -49,7 +48,7 @@ class UserController(private val userService : UserService) {
         }
     }
 
-    @PutMapping("{nickname}/formation")
+    @PutMapping("/{nickname}/formation")
     fun changeFormation(@PathVariable nickname : String, @RequestBody dto : FormationDTO) : ResponseEntity<String> {
         return try {
             userService.changeFormation(nickname, dto.aModelo())
@@ -60,7 +59,7 @@ class UserController(private val userService : UserService) {
         }
     }
 
-    @GetMapping("{nickname}/formation")
+    @GetMapping("/{nickname}/formation")
     fun getFormation(@PathVariable nickname: String) : FormationDTO {
         val formation = userService.getFormation(nickname)
         return FormationDTO.desdeModelo(formation)

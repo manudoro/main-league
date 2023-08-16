@@ -1,6 +1,6 @@
 package com.ar.mainleague.controllers.dto
 
-import com.ar.mainleague.modelo.PlayerOverview
+import com.ar.mainleague.modelo.Player
 import com.ar.mainleague.modelo.User
 
 class UserDTO(
@@ -9,11 +9,13 @@ class UserDTO(
     val players : List<PlayerDTO>
 ) {
     companion object {
-        fun desdeModelo(user: User, players: List<PlayerOverview>) =
+        fun desdeModelo(user: User) =
             UserDTO(
                 nickname = user.nickname,
                 formacion = FormationDTO.desdeModelo(user.formation),
-                players = players.map { p -> PlayerDTO.desdeModelo(p) }
+                players = user.players.map { p -> PlayerDTO.desdeModelo(p) }
             )
+
+
+        }
     }
-}

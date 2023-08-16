@@ -1,5 +1,6 @@
 package com.ar.mainleague.service.utils
 
+import com.ar.mainleague.service.exceptions.NotFoundException
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.findByIdOrNull
 
