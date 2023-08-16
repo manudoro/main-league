@@ -2,10 +2,7 @@ package com.ar.mainleague.serviceTest
 
 import com.ar.mainleague.modelo.Round
 import com.ar.mainleague.service.RoundService
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -58,6 +55,18 @@ class RoundServiceTest {
         roundService.playRound(round1)
 
 
+    }
+
+    @Test
+    fun getTopScores(){
+        val scores = roundService.getTopScores(1)
+        Assertions.assertTrue(true)
+    }
+
+    @Test
+    fun getTable(){
+        val scores = roundService.getRoundTable(1)
+        Assertions.assertTrue(true)
     }
 
 }

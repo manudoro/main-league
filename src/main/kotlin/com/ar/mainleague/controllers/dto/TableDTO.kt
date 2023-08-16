@@ -2,7 +2,7 @@ package com.ar.mainleague.controllers.dto
 
 import com.ar.mainleague.modelo.RoundTable
 
-class TableDTO(users : List<RoundUserDTO>, roundNo : Long, roundWinner : RoundUserDTO) {
+class TableDTO(val users : List<RoundUserDTO>, val roundNo : Long, val roundWinner : RoundUserDTO) {
 
 
     companion object {

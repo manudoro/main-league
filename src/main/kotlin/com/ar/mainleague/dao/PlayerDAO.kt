@@ -17,4 +17,6 @@ interface PlayerDAO : JpaRepository<Player, Long>{
 
     @Query("SELECT p.rating FROM Player p where p.id = :id")
     fun findRatingById(id : Long) : Double
+
+    fun findByIdIn(ids : List<Long>) : List<Player>
 }

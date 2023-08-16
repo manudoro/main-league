@@ -3,6 +3,7 @@ package com.ar.mainleague.service.impl
 import com.ar.mainleague.dao.RoundDAO
 import com.ar.mainleague.dao.RoundTableDAO
 import com.ar.mainleague.dao.UserDAO
+import com.ar.mainleague.modelo.PlayerScore
 import com.ar.mainleague.modelo.Round
 import com.ar.mainleague.modelo.RoundTable
 import com.ar.mainleague.modelo.User
@@ -45,6 +46,10 @@ class RoundServiceImpl(private val counterService: CounterService) : RoundServic
     override fun getScoresByRound(roundNo: Long): Map<Long, Int> {
         val round = dao.findByRound(roundNo) ?: throw NotFoundException("Round $roundNo not found.")
         return round.scores
+    }
+
+    override fun getTopScores(roundNo: Long): List<PlayerScore> {
+        return dao.getTopScores(roundNo)
     }
 
     private fun sumUserScores(playersId: List<Long>, scores: Map<Long, Int>): Int {

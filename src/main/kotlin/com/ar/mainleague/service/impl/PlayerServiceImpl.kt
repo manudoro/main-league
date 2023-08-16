@@ -13,15 +13,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class PlayerServiceImpl : PlayerService, EntentyUtils(){
     @Autowired private lateinit var dao : PlayerDAO
-    //@Autowired private lateinit var mongoDao : PlayerMongoWrapper
-
 
     override fun inscribePlayer(pos: Position, age: Int, name: String, lastName: String, rating: Double) : Player {
-        //val playerOverview = PlayerOverview(name, lastName, age, pos)
         var player = Player(pos, age, name, lastName, rating)
-        //player = dao.save(player)
-        //playerOverview.relId = player.id
-        //mongoDao.save(playerOverview)
         return dao.save(player)
     }
 
@@ -29,28 +23,18 @@ class PlayerServiceImpl : PlayerService, EntentyUtils(){
         return this.findByIdOrThrow(dao, id)
     }
 
-    /*override fun getPlayerStats(id: Long): PlayerOverview {
-        return mongoDao.findByRelId(id)
+    override fun getPlayers(ids: List<Long>): List<Player> {
+        return dao.findByIdIn(ids)
     }
-
-     */
-
-
 
     override fun getAll(): List<Player> {
         return dao.findAll()
     }
 
-    /*override fun researchPlayers(criteria: PlayerSearchFilter): List<PlayerOverview> {
-        return mongoDao.searchPlayers(criteria)
-
-    }
-
-     */
-
     override fun clear() {
         dao.deleteAll()
-        //mongoDao.deleteAll()
     }
+
+
 
 }

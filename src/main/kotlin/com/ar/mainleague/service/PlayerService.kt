@@ -11,4 +11,5 @@ interface PlayerService {
     fun getAll(): List<Player>
 
     fun clear()
+    fun getPlayers(ids: List<Long>): List<Player>
 }
